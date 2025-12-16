@@ -1,4 +1,4 @@
-name: Deploy Node App to EC2
+name: Deploy Forum Backend to EC2
 
 on:
   push:
@@ -23,17 +23,19 @@ jobs:
           script: |
             cd /home/ubuntu || exit 1
 
-            if [ ! -d "backend-sece-Aiml" ]; then
+            if [ ! -d "Forum-Application-Backend" ]; then
               git clone https://github.com/KIRIT-P-S/Forum-Application-Backend.git
             fi
 
             cd Forum-Application-Backend || exit 1
             git pull origin main
 
-            echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
+            echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" > .env
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+            echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
             echo "PORT=5000" >> .env
 
             npm install
-            pm2 delete student-api || true
-            pm2 start server.js --name student-api
+            pm2 delete forum-api || true
+            pm2 start src/server.js --name forum-api
             pm2 save
