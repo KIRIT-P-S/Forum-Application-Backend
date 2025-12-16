@@ -3,7 +3,7 @@ name: Deploy Node App to EC2
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
@@ -31,7 +31,7 @@ jobs:
             git pull origin master
 
             echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
-            echo "PORT=4000" >> .env
+            echo "PORT=5000" >> .env
 
             npm install
             pm2 delete student-api || true
